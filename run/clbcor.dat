@@ -1,0 +1,182 @@
+<?xml version="1.0" ?>
+<config>
+    <pscor_configs>
+        <value>
+            <PowerSupply Type="B5-80" MaxVoltage="40" MaxCurrent="4" />
+            <ParametersData>
+                <value Type="CurrentSet">
+                    <TemperatureCorrections>
+                        <value>
+                            <Range min="2" max="3" />
+                            <Corrections>
+                                <value cor="1">
+                                    <Range min="45" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                        <value>
+                            <Range min="3" max="5" />
+                            <Corrections>
+                                <value cor="2">
+                                    <Range min="45" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                    </TemperatureCorrections>
+                </value>
+                <value Type="VoltageSet">
+                    <TemperatureCorrections>
+                        <value>
+                            <Range min="0" max="41" />
+                            <Corrections>
+                                <value cor="0">
+                                    <Range min="0" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                    </TemperatureCorrections>
+                </value>
+            </ParametersData>
+        </value>
+        <value>
+            <PowerSupply Type="B5-80/1" MaxVoltage="80" MaxCurrent="2" />
+            <ParametersData>
+                <value Type="CurrentSet">
+                    <TemperatureCorrections>
+                        <value>
+                            <Range min="0" max="3" />
+                            <Corrections>
+                                <value cor="0">
+                                    <Range min="0" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                    </TemperatureCorrections>
+                </value>
+                <value Type="VoltageSet">
+                    <TemperatureCorrections>
+                        <value>
+                            <Range min="0" max="81" />
+                            <Corrections>
+                                <value cor="0">
+                                    <Range min="0" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                    </TemperatureCorrections>
+                </value>
+            </ParametersData>
+        </value>
+        <value>
+            <PowerSupply Type="B5-80/2" MaxVoltage="80" MaxCurrent="4" />
+            <ParametersData>
+                <value Type="CurrentSet">
+                    <TemperatureCorrections>
+                        <value>
+                            <Range min="2" max="3" />
+                            <Corrections>
+                                <value cor="1">
+                                    <Range min="45" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                        <value>
+                            <Range min="3" max="5" />
+                            <Corrections>
+                                <value cor="2">
+                                    <Range min="45" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                    </TemperatureCorrections>
+                </value>
+                <value Type="VoltageSet">
+                    <TemperatureCorrections>
+                        <value>
+                            <Range min="0" max="81" />
+                            <Corrections>
+                                <value cor="0">
+                                    <Range min="0" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                    </TemperatureCorrections>
+                </value>
+            </ParametersData>
+        </value>
+        <value>
+            <PowerSupply Type="B5-80/3" MaxVoltage="40" MaxCurrent="8" />
+            <ParametersData>
+                <value Type="CurrentSet">
+                    <TemperatureCorrections>
+                        <value>
+                            <Range min="2" max="3" />
+                            <Corrections>
+                                <value cor="1">
+                                    <Range min="45" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                        <value>
+                            <Range min="3" max="9" />
+                            <Corrections>
+                                <value cor="2">
+                                    <Range min="45" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                    </TemperatureCorrections>
+                </value>
+                <value Type="VoltageSet">
+                    <TemperatureCorrections>
+                        <value>
+                            <Range min="0" max="41" />
+                            <Corrections>
+                                <value cor="0">
+                                    <Range min="0" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                    </TemperatureCorrections>
+                </value>
+            </ParametersData>
+        </value>
+        <value>
+            <PowerSupply Type="B5-80/4" MaxVoltage="80" MaxCurrent="5" />
+            <ParametersData>
+                <value Type="CurrentSet">
+                    <TemperatureCorrections>
+                        <value>
+                            <Range min="2" max="3" />
+                            <Corrections>
+                                <value cor="1">
+                                    <Range min="45" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                        <value>
+                            <Range min="3" max="6" />
+                            <Corrections>
+                                <value cor="2">
+                                    <Range min="45" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                    </TemperatureCorrections>
+                </value>
+                <value Type="VoltageSet">
+                    <TemperatureCorrections>
+                        <value>
+                            <Range min="0" max="81" />
+                            <Corrections>
+                                <value cor="0">
+                                    <Range min="0" max="100" />
+                                </value>
+                            </Corrections>
+                        </value>
+                    </TemperatureCorrections>
+                </value>
+            </ParametersData>
+        </value>
+    </pscor_configs>
+</config>

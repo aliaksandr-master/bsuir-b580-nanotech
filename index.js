@@ -10,7 +10,7 @@ var device = require('./modules/device');
 
 async.series([
 	function (done) {
-		device.writeSettings({ voltage: 0, current: 0}, done);
+		device.writeSettings({ voltage: 0, current: 0 }, done);
 	},
 	function (done) {
 		setTimeout(function () {
