@@ -10,7 +10,7 @@ module.exports = {
 		emitMinInterval: 500,
 		deviceRead: 200,
 
-		settingsFile: path.normalize(__dirname + '/run/program/settings.txt'),
-		logFile: path.normalize(__dirname + '/run/program/log.txt')
+		settingsFile: path.normalize(__dirname + '/run/runtime/settings.txt'),
+		logFile: path.normalize(__dirname + '/run/runtime/log.txt')
 	}
 };

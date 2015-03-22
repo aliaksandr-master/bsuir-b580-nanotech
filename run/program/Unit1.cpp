@@ -110,13 +110,13 @@ void __fastcall TMyThread::Execute()
     long nMU, nMI;
     m_ptrPSControl->RPsGetMsrVoltage(index, &nMU);
     m_ptrPSControl->RPsGetMsrCurrent(index, &nMI);
-    std::ofstream log_file("log.txt");
+    std::ofstream log_file("../runtime/log.txt");
     log_file << nMU << " " << nMI;
     log_file.close();
 
     long mvolts;
     long mamps;
-    std::ifstream settings_file("settings.txt");
+    std::ifstream settings_file("../runtime/settings.txt");
     settings_file >> mvolts >> mamps;
     settings_file.close();
 
