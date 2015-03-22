@@ -1,0 +1,26 @@
+{
+  "name": "node-arduino-detector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "app": "^0.1.0",
+    "ejs": "^2.3.1",
+    "async": "^0.9.0",
+    "express": "^3.4.0",
+    "johnny-five": "^0.7.56",
+    "lodash": "^3.5.0",
+    "markedejs": "^0.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://alxe_master@bitbucket.org/alxe_master/node-arduino-detector.git"
+  },
+  "author": "aliaksandr-pasynkau <alxe.master@gmail.com>",
+  "license": "MIT"
+}
