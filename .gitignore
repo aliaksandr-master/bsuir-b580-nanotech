@@ -1,4 +1,16 @@
-app/node_modules
-node_modules
-.idea/
-.npm-debug.log
+# ide and os files
+/.idea/
+**/*.DS_Store
+**/*.kate-swp
+**/*.desktop
+**/*.thumb
+**/*.sublime*
+**/.~*
+**/~*
+**/*~
+*.orig
+
+# special ignore
+/npm-debug.log
+/node_modules/
+/lib-cov/ 
