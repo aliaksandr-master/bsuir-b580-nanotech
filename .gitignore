@@ -10,7 +10,11 @@
 **/*~
 *.orig
 
-# special ignore
+# package managers
 /npm-debug.log
-/node_modules/
-/lib-cov/ 
+/node_modules
+/web-client-src/bower_components
+
+# build files
+/web-client
+/.tmp
