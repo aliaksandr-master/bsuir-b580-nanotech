@@ -11,10 +11,6 @@ module.exports = function (grunt, CFG) {
 
 	this
 
-		.jscs({
-			files: [ jsFiles ]
-		})
-
 		.eslint({
 			files: [ jsFiles ]
 		});
