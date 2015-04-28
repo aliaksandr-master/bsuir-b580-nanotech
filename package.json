@@ -5,11 +5,9 @@
   "main": "index.js",
   "scripts": {
     "prepare": "npm prune && npm install && npm update && bower cache clean && bower install && bower update",
-    "dev": "npm run prepare && npm test && grunt build",
-    "dev-server": "npm test && grunt build server",
-    "dev-watch": "npm test && grunt build server watch",
-    "prod": "npm run prepare && npm test && grunt build minify",
-    "qa": "npm run prepare && npm test && grunt build minify",
+    "local": "npm test && grunt build",
+    "local-server": "npm test && grunt build server",
+    "local-watch": "npm test && grunt build server watch",
     "test": "grunt check"
   },
   "repository": {

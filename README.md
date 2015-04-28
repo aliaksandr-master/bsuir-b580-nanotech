@@ -15,12 +15,6 @@ run next command for build the project, run server and file watchers
 $ npm run dev-watch
 ```
 
-run next command for build the project in dependence of environment
-```shell
-$ npm run prod
-$ npm run dev
-$ npm run qa
-```
 
 for running tests need run next command:
 ```shell
