@@ -1,9 +1,16 @@
 'use strict';
 
 import React from 'react';
+import ReactRouter from 'react-router';
 import 'css!./Header';
 
-export default class Header extends React.Component {
+var Link = ReactRouter.Link;
+
+export default React.createClass({
+	mixins: [
+		ReactRouter.State,
+		ReactRouter.Navigation
+	],
 	render () {
 		return (
 			<nav className="navbar navbar-default navbar-fixed-top b-layout__header">
@@ -32,4 +39,4 @@ export default class Header extends React.Component {
 			</nav>
 		);
 	}
-}
+});

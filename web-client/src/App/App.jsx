@@ -2,17 +2,16 @@
 
 import React from 'react';
 import ReactRouter from 'react-router';
-import Header from './Header/Header';
-import Footer from './Footer/Footer';
-import Content from './Body/Body';
-import NotFound from './Body/NotFound/NotFound';
-import Experiment from './Body/Experiment/Experiment';
+import Header from './regions/Header/Header';
+import Footer from './regions/Footer/Footer';
+import Content from './regions/Body/Body';
 import 'css!./App';
+import routes from '../routes';
 
 var Link = ReactRouter.Link;
 var RouteHandler = ReactRouter.RouteHandler;
 
-export default class App extends React.Component {
+let App = React.createClass({
 	render () {
 		return (
 			<div className="wrapper">
@@ -23,19 +22,11 @@ export default class App extends React.Component {
 			</div>
 		);
 	}
-}
+});
 
-var Route = ReactRouter.Route;
-var DefaultRoute = ReactRouter.DefaultRoute;
-var routes = (
-	<Route name="app" handler={App} path="/">
-		<Route name="experiment" path="/experiment" handler={Experiment}/>
-		<Route name="create-experiment" path="/experiment/new" handler={Experiment} />
-		<DefaultRoute handler={NotFound}/>
-	</Route>
-);
+export default App;
 
-ReactRouter.run(routes, ReactRouter.HistoryLocation, (Handler) => {
+ReactRouter.run(routes(App), ReactRouter.HistoryLocation, (Handler) => {
 	React.render(<Handler/>, window.document.body);
 	console.log(window.location.href, 'rendered at', new Date());
 });
