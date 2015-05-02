@@ -11,7 +11,7 @@ require.config({
 	map: {
 		'*': {
 			react: 'bower_components/react/react-with-addons',
-			'react-router': 'bower_components/react-router/build/global/ReactRouter.js',
+			'react-router': 'bower_components/react-router/build/umd/ReactRouter.js',
 			classnames: 'bower_components/classnames/index',
 
 			//jquery: 'bower_components/jquery/jquery',
