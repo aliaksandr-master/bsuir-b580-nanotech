@@ -9,13 +9,13 @@ module.exports = require('grunto')(function (grunt) {
 
 	this.context({
 		CWD: CWD,
-		GRUNT: 'grunt',
-		SRC: 'src',
-		BUILD: 'build'
+		GRUNT: 'web-client/grunt',
+		SRC: 'web-client/src',
+		BUILD: 'web-client/build'
 	});
 
 	this.scan([{
-		cwd: 'grunt/',
+		cwd: 'web-client/grunt/',
 		src: [
 			'**/*.js',
 			'!tasks/**/*.js',

@@ -13,8 +13,8 @@
 # package managers
 /npm-debug.log
 /node_modules
-/web-client-src/bower_components
+/web-client/src/bower_components
 
 # build files
-/web-client
+/web-client/build
 /.tmp
