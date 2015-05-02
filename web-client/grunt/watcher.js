@@ -9,6 +9,7 @@ module.exports = function (grunt, CFG) {
 				CFG.SRC + '/**/*.jsx'
 			],
 			tasks: [
+				'check/scripts',
 				'build/scripts'
 			]
 		})

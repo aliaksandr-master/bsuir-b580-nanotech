@@ -8,9 +8,7 @@ module.exports = function (grunt, CFG) {
 				{
 					expand: true,
 					cwd: CFG.SRC,
-					src: [
-						'bower_components/**/*.{js,css,less,png,jpg,gif,woff,otf,ttf,svg}'
-					],
+					src: 'bower_components/**/*.{js,css,less,png,jpg,gif,woff,otf,ttf,svg}',
 					dest: CFG.BUILD
 				}
 			]

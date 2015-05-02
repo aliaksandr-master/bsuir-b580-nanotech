@@ -7,15 +7,17 @@ module.exports = require('grunto')(function (grunt) {
 		require(CWD + '/' + f)(grunt);
 	});
 
-	this.context({
+	var CFG = {
 		CWD: CWD,
 		GRUNT: 'web-client/grunt',
 		SRC: 'web-client/src',
 		BUILD: 'web-client/build'
-	});
+	};
+
+	this.context(CFG);
 
 	this.scan([{
-		cwd: 'web-client/grunt/',
+		cwd: CFG.GRUNT,
 		src: [
 			'**/*.js',
 			'!tasks/**/*.js',
