@@ -1,4 +1,4 @@
 {
-  "directory": "web-client-src/bower_components",
+  "directory": "web-client/src/bower_components",
   "json": "bower.json"
 }
