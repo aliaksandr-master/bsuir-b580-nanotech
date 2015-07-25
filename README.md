@@ -11,17 +11,7 @@ run next command for update bower and npm packages
 $ npm run prepare
 ```
 
-run next command for build the project and run the development server 
+run next command for build the project and run device observing
 ```shell
-$ npm run dev-server
-```
-
-run next command for build the project, run server and file watchers
-```shell
-$ npm run dev-watch
-```
-
-for running tests need run next command:
-```shell
-$ npm test
+$ npm start
 ```
