@@ -1,22 +1,21 @@
 # ide and os files
-/.idea/
-**/*.DS_Store
-**/*.kate-swp
-**/*.desktop
-**/*.thumb
-**/*.sublime*
-**/.~*
-**/~*
-**/*~
+.idea/
+*.DS_Store
+*.kate-swp
+*.desktop
+*.thumb
+*.sublime*
+.~*
+~*
+*~
 *.orig
 
 # package managers
 /npm-debug.log
 /node_modules
-/web-client/src/bower_components
 
 # build files
-/web-client/build
 /.tmp
 
+# other files
 /run/log--*
