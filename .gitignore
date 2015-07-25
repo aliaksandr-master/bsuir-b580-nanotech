@@ -11,8 +11,9 @@
 *.orig
 
 # package managers
-/npm-debug.log
-/node_modules
+npm-debug.log
+node_modules/
+nwjs-v0.12.2-linux-x64/
 
 # build files
 /.tmp
