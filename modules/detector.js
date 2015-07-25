@@ -1,10 +1,8 @@
 "use strict";
 
-
 var _ = require('lodash');
 var five = require('johnny-five');
 var async = require('async');
-
 var config = require('../config');
 var value = require('../lib/value');
 var delay = require('../lib/delay');

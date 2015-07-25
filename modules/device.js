@@ -2,75 +2,80 @@
 
 var _ = require('lodash');
 var fs = require('fs');
+var path = require('path');
 var config = require('../config');
+var MAX_CURRENT = config.device.maxCurrent;
+var MAX_VOLTAGE = config.device.maxVoltage;
 
-var device = module.exports;
+exports.read = function (file, prev) {
+	return new Promise(function (resolve, reject) {
+		var data;
 
-device.read = function (file, callback) {
-	var data;
+		try {
+			data = String(fs.readFileSync(file));
+		} catch (e) {
+			return reject(e);
+		}
 
-	try {
-		data = fs.readFileSync(file);
-	} catch (e) {
-		callback(e.message);
-		return;
-	}
+		var _data = data.trim().split(/\s+/);
+		var voltage = Number(_data[0]) / 1000;
+		var current = Number(_data[1]) / 1000;
 
-	data = String(data);
+		if (!_.isNumber(voltage) || !_.isNumber(current) || _.isNaN(voltage) || _.isNaN(current) || voltage < 0 || current < 0 || voltage > MAX_VOLTAGE || current > MAX_CURRENT) {
+			if (prev) {
+				return prev;
+			}
 
-	var numbers = _.map(data.trim().split(/\s+/), function (val) {
-		return parseInt(val, 10);
+			return reject(new Error('READ ERROR: file "' + path.basename(file) + '" v:' + voltage + ' i:' + current + ':::: "' + data + '"'));
+		}
+
+		resolve({
+			voltage: voltage,
+			current: current
+		});
 	});
+};
 
-	var voltage = numbers[0]/1000;
-	var current = numbers[1]/1000;
+exports.write = function (file, values) {
+	return new Promise(function (resolve, reject) {
+		if (!values || !_.isNumber(values.voltage) || _.isNaN(values.voltage) || !_.isNumber(values.current) || _.isNaN(values.current) || values.voltage < 0 || values.voltage > MAX_VOLTAGE || values.current < 0 || values.current > MAX_CURRENT) {
+			return reject(new Error('WRITE ERROR: values must be object, values.voltage and values.current must be number' + '::::' + JSON.stringify(values)));
+		}
 
-	if (!_.isNumber(voltage) || _.isNaN(voltage) || !_.isNumber(current) || _.isNaN(current) || voltage < 0 || voltage > 40 || current < 0 || current > 4) {
-		callback('incorrect read file "' + file + '" v:' + voltage + ' i:' + current);
-		return;
-	}
+		var data = (values.voltage * 1000).toFixed(0) + ' ' + (values.current * 1000).toFixed(0);
 
-	callback(null, {
-		voltage: voltage,
-		current: current
+		try {
+			fs.writeFileSync(file, data);
+		} catch (e) {
+			return reject(e);
+		}
+
+		resolve(values);
 	});
 };
 
-device.write = function (file, values, callback) {
-	if (!values || !_.isNumber(values.voltage) || _.isNaN(values.voltage) || !_.isNumber(values.current) || _.isNaN(values.current) || values.voltage < 0 || values.voltage > 40 || values.current < 0 || values.current > 4) {
-		callback('values must be object, values.voltage and values.current must be number');
-		return;
-	}
+exports.readCurrentValues = function (prev) {
+	return exports.read(config.detector.logFile, prev);
+};
 
-	values = {
-		voltage: values.voltage,
-		current: values.current
-	};
+exports.readSettingValues = function (prev) {
+	return exports.read(config.detector.settingsFile, prev);
+};
 
-	var numbers = _.map([ values.voltage, values.current ], function (val) {
-		return (val * 1000).toFixed(0);
+exports.writeSettingValues = function (values) {
+	return exports.write(config.detector.settingsFile, values);
+};
+
+exports.resetSettings = function () {
+	return exports.write(config.detector.settingsFile, { voltage: 0, current: 0 });
+};
+
+exports.resetCurrentValues = function () {
+	return exports.write(config.detector.logFile, { voltage: 0, current: 0 });
+};
+
+exports.reset = function () {
+	return exports.resetSettings().then(function () {
+		return exports.resetCurrentValues();
 	});
-
-	var data = numbers.join(' ').trim();
-
-	try {
-		fs.writeFileSync(file, data);
-	} catch (e) {
-		callback(e.message);
-		return;
-	}
-
-	callback(null, values);
-};
-
-device.readLog = function (callback) {
-	device.read(config.detector.logFile, callback);
-};
-
-device.readSettings = function (callback) {
-	device.read(config.detector.settingsFile, callback);
-};
-
-device.writeSettings = function (values, callback) {
-	device.write(config.detector.settingsFile, values, callback);
 };
