@@ -1,3 +1,5 @@
 'use strict';
 
-require('./lib/app');
+var app = require('./lib/app');
+
+app();
