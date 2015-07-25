@@ -18,5 +18,5 @@
 /.tmp
 
 # other files
-/run/log--*
+/run/log/
 /run/runtime/
