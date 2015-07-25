@@ -18,3 +18,5 @@
 # build files
 /web-client/build
 /.tmp
+
+/run/log--*
