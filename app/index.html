@@ -23,6 +23,7 @@
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#chartTab" aria-controls="chartTab" role="tab" data-toggle="tab">Chart</a></li>
             <li role="presentation"><a href="#dataTableTab" aria-controls="dataTableTab" role="tab" data-toggle="tab">Data Table</a></li>
+            <li role="presentation"><a href="#infoTab" aria-controls="infoTab" role="tab" data-toggle="tab">Info</a></li>
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="chartTab">
@@ -35,8 +36,14 @@
                 <br/>
             </div>
             <div role="tabpanel" class="tab-pane" id="dataTableTab">
-                <h1>Data Table</h1>
+                <br/>
                 <table class="table table-bordered table-responsive" id="dataTable"></table>
+                <br/>
+                <br/>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="infoTab">
+                <h1>Info</h1>
+                <pre id="config"></pre>
             </div>
         </div>
     </div>
@@ -50,55 +57,57 @@
     <script type="text/javascript" src="./vendor/highcharts/js/highcharts.js"></script>
     <script type="text/javascript">
         $(function () {
+            var path = require('path');
+
+            var gui = require('nw.gui');
+            var win = gui.Window.get();
+
+            var app = require('../lib/app');
+            var table = require('./window-table');
+            var chart = require('./window-chart');
+
             var $table = $('#dataTable');
             var $chartVoltage = $('#chartVoltage');
             var $chartCurrent = $('#chartCurrent');
             var $current = $('#currentCurrent');
             var $voltage = $('#currentVoltage');
             var $expName = $('#expName');
+            var $config = $('#config');
 
-            var gui = require('nw.gui');
-
-            var win = gui.Window.get();
-            var table = require('./window-table');
-            var chart = require('./window-chart');
-            var path = require('path');
             var tableLog = table($table, { containerMethod: 'append' });
             var chartVoltageLog = chart($chartVoltage, { name: 'Voltage', series: [ { name: 'Value', data: [] } ] });
             var chartCurrentLog = chart($chartCurrent, { name: 'Current', series: [ { name: 'Value', data: [] } ] });
 
-            var app = require('../lib/app');
             var manager = app({ window: true });
 
             var prevTime;
-            manager.emitter.on('data', function (data) {
-                var newTime = Math.floor(data.time);
+            manager.emitter
+                .on('start', function (config) {
+                    tableLog.reset();
+                    chartVoltageLog.reset();
+                    chartCurrentLog.reset();
 
-                if (prevTime != newTime) {
+                    $expName.html(path.basename(config.log.cvsFile));
+
+                    $config.html(JSON.stringify(config, null, 4));
+                })
+                .on('data', function (data) {
+                    var newTime = Math.floor(data.time);
+
+                    if (prevTime != newTime) {
+                        tableLog.commit(data);
+                        chartVoltageLog.commit(0, { x: data.time, y: data.voltage });
+                        chartCurrentLog.commit(0, { x: data.time, y: data.current });
+                    }
+
                     prevTime = newTime;
-                    tableLog.commit(data);
-                    chartVoltageLog.commit(0, { x: newTime, y: data.voltage });
-                    chartCurrentLog.commit(0, { x: newTime, y: data.current });
-                }
 
-                $current.html(data.current.toFixed(2));
-                $voltage.html(data.voltage.toFixed(2));
-            });
-
-            manager.emitter.on('start', function (config) {
-                chartVoltageLog.reset();
-                chartCurrentLog.reset();
-                tableLog.reset();
-
-                $expName.html(path.basename(config.log.cvsFile));
-            });
+                    $current.html(data.current.toFixed(2));
+                    $voltage.html(data.voltage.toFixed(2));
+                });
 
             $('[name="state"]').on('change', function (e) {
-                var state = Number($(this).val());
-
-                console.log(state);
-
-                if (state) {
+                if (Number($(this).val())) {
                     manager.start();
                 } else {
                     manager.stop();

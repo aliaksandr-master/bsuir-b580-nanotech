@@ -17,6 +17,8 @@ nwjs-v0.12.2-linux-x64/
 
 # build files
 /.tmp
+/.build-nw-cache
+/build
 
 # other files
 /run/log/

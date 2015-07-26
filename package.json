@@ -1,5 +1,5 @@
 {
-  "name": "bsuir-b580-nanotech.",
+  "name": "bsuir-b580-nanotech",
   "version": "1.0.0",
   "description": "",
   "main": "app/index.html",
@@ -7,19 +7,27 @@
     "prepare": "npm prune && npm install && npm update",
     "start": "node index.js --interval=100",
     "window": "./nwjs-v0.12.2-linux-x64/nw .",
-    "test": ""
+    "test": "",
+    "build": "./build.sh"
   },
   "window": {
-    "title": "Dummy demo",
-    "toolbar": true,
+    "title": "Experiment",
+    "toolbar": false,
     "frame": true,
+    "resizable": true,
     "width": 1150,
     "height": 800,
-    "position": "mouse",
+    "position": "center",
     "min_width": 1024,
-    "min_height": 600,
-    "max_width": 1980,
-    "max_height": 1000
+    "min_height": 600
+  },
+  "platformOverrides": {
+    "win": {},
+    "win32": {},
+    "win64": {}
+  },
+  "webkit": {
+    "plugin": true
   },
   "repository": {
     "type": "git",
@@ -30,11 +38,13 @@
   "dependencies": {
     "angular": "^1.4.3",
     "bootstrap": "^3.3.5",
+    "fs-extra": "^0.22.1",
     "jquery": "^2.1.4",
     "lodash": "^3.10.0",
     "optimist": "^0.6.1"
   },
   "devDependencies": {
-    "husky": "^0.9.1"
+    "husky": "^0.9.1",
+    "nw-builder": "^2.0.1"
   }
 }

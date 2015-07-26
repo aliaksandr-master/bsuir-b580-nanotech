@@ -32,6 +32,9 @@ module.exports = function ($chartWr, options) {
 				}
 			}
 		},
+		credits: {
+			enabled: false
+		},
 		title: {
 			text: options.name
 		},
