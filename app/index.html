@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en-US" style="overflow-y: scroll;">
+<head>
+    <meta charset="UTF-8">
+    <title>Experiment</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+    <div style="margin: 10px 20px;">
+        <div>
+            <div class="clearfix" style="margin: 10px 0 20px 0;">
+                <h1 id="expName" class="pull-left" style="margin: 5px 0 0;"></h1>
+                <div class="pull-right btn-group text-center" data-toggle="buttons">
+                    <label class="btn btn-lg btn-default active"><input type="radio" value="0" name="state" id="option1" autocomplete="off" checked> Off</label>
+                    <label class="btn btn-lg btn-default"><input type="radio" value="1" name="state" id="option2" autocomplete="off"> On</label>
+                </div>
+            </div>
+            <div class="clearfix well" style="font-family: monospace; padding: 5px 20px;">
+                <h1 class="pull-left" style="margin: 0;"><span id="currentVoltage">0.00</span> <b>V</b></h1>
+                <h1 class="pull-right" style="margin: 0;"><span id="currentCurrent">0.00</span> <b>A</b></h1>
+            </div>
+        </div>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#chartTab" aria-controls="chartTab" role="tab" data-toggle="tab">Chart</a></li>
+            <li role="presentation"><a href="#dataTableTab" aria-controls="dataTableTab" role="tab" data-toggle="tab">Data Table</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="chartTab">
+                <br/>
+                <div id="chartVoltage"></div>
+                <br/>
+                <br/>
+                <div id="chartCurrent"></div>
+                <br/>
+                <br/>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="dataTableTab">
+                <h1>Data Table</h1>
+                <table class="table table-bordered table-responsive" id="dataTable"></table>
+            </div>
+        </div>
+    </div>
+    <style type="text/css">
+        .table.table-bordered td {
+            padding: 2px 4px;
+        }
+    </style>
+    <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./vendor/highcharts/js/highcharts.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var $table = $('#dataTable');
+            var $chartVoltage = $('#chartVoltage');
+            var $chartCurrent = $('#chartCurrent');
+            var $current = $('#currentCurrent');
+            var $voltage = $('#currentVoltage');
+            var $expName = $('#expName');
+
+            var gui = require('nw.gui');
+
+            var win = gui.Window.get();
+            var table = require('./window-table');
+            var chart = require('./window-chart');
+            var path = require('path');
+            var tableLog = table($table, { containerMethod: 'append' });
+            var chartVoltageLog = chart($chartVoltage, { name: 'Voltage', series: [ { name: 'Value', data: [] } ] });
+            var chartCurrentLog = chart($chartCurrent, { name: 'Current', series: [ { name: 'Value', data: [] } ] });
+
+            var app = require('../lib/app');
+            var manager = app({ window: true });
+
+            var prevTime;
+            manager.emitter.on('data', function (data) {
+                var newTime = Math.floor(data.time);
+
+                if (prevTime != newTime) {
+                    prevTime = newTime;
+                    tableLog.commit(data);
+                    chartVoltageLog.commit(0, { x: newTime, y: data.voltage });
+                    chartCurrentLog.commit(0, { x: newTime, y: data.current });
+                }
+
+                $current.html(data.current.toFixed(2));
+                $voltage.html(data.voltage.toFixed(2));
+            });
+
+            manager.emitter.on('start', function (config) {
+                chartVoltageLog.reset();
+                chartCurrentLog.reset();
+                tableLog.reset();
+
+                $expName.html(path.basename(config.log.cvsFile));
+            });
+
+            $('[name="state"]').on('change', function (e) {
+                var state = Number($(this).val());
+
+                console.log(state);
+
+                if (state) {
+                    manager.start();
+                } else {
+                    manager.stop();
+                }
+            });
+
+            win.on('close', function () {
+                manager.stop().then(function () {
+                    win.close(true);
+                }, function () {
+                    win.close(true);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

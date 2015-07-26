@@ -10,12 +10,10 @@ module.exports = function (setting, values, date, number) {
 		phase = !phase;
 	}
 
-	console.log('phase', phase);
-
 	if (phase) {
-		setting.voltage += 2;
+		setting.voltage += 4;
 
-		if (setting.voltage > 16) {
+		if (setting.voltage > 18) {
 			setting.voltage = 0;
 		}
 

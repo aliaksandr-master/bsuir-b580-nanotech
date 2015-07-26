@@ -2,4 +2,4 @@
 
 var app = require('./lib/app');
 
-app();
+app(require('optimist').argv).start();
