@@ -16,3 +16,9 @@ cp ./package.json ./.tmp
 cp ./index.js ./.tmp
 
 node ./build-nw.js
+
+rm -f ./run/log/*
+cp -r ./run/* ./build/bsuir-b580-nanotech/win32/
+cp -r ./run/* ./build/bsuir-b580-nanotech/win64/
+mv ./build/bsuir-b580-nanotech/win64/program/Project1.exe ./build/bsuir-b580-nanotech/win64/program/Application.exe
+mv ./build/bsuir-b580-nanotech/win32/program/Project1.exe ./build/bsuir-b580-nanotech/win32/program/Application.exe

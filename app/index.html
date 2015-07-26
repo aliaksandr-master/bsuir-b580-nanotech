@@ -10,19 +10,21 @@
         <div>
             <div class="clearfix" style="margin: 10px 0 20px 0;">
                 <h1 id="expName" class="pull-left" style="margin: 5px 0 0;"></h1>
-                <div class="pull-right btn-group text-center" data-toggle="buttons">
+                <div id="mainButtons" class="pull-right btn-group text-center" data-toggle="buttons">
                     <label class="btn btn-lg btn-default active"><input type="radio" value="0" name="state" id="option1" autocomplete="off" checked> Off</label>
-                    <label class="btn btn-lg btn-default"><input type="radio" value="1" name="state" id="option2" autocomplete="off"> On</label>
+                    <label id="mainButtonOn" class="btn btn-lg btn-default"><input type="radio" value="1" name="state" id="option2" autocomplete="off"> On</label>
                 </div>
             </div>
             <div class="clearfix well" style="font-family: monospace; padding: 5px 20px;">
                 <h1 class="pull-left" style="margin: 0;"><span id="currentVoltage">0.00</span> <b>V</b></h1>
                 <h1 class="pull-right" style="margin: 0;"><span id="currentCurrent">0.00</span> <b>A</b></h1>
+                <h1 class="text-center" style="margin: 0;"><span id="currentTime">0</span> <b>s</b></h1>
             </div>
         </div>
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#chartTab" aria-controls="chartTab" role="tab" data-toggle="tab">Chart</a></li>
             <li role="presentation"><a href="#dataTableTab" aria-controls="dataTableTab" role="tab" data-toggle="tab">Data Table</a></li>
+            <li role="presentation"><a href="#manTab" aria-controls="manTab" role="tab" data-toggle="tab">Manual</a></li>
             <li role="presentation"><a href="#infoTab" aria-controls="infoTab" role="tab" data-toggle="tab">Info</a></li>
         </ul>
         <div class="tab-content">
@@ -42,12 +44,95 @@
                 <br/>
             </div>
             <div role="tabpanel" class="tab-pane" id="infoTab">
-                <h1>Info</h1>
+                <br/>
                 <pre id="config"></pre>
+                <br/>
+                <p><b>alxe.master@gmail.com</b> - Aliaksandr Pasynkau - разработчик программы. можно слать вопросы и предложения но не часто =)</p>
+                <br/>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="manTab">
+                <div class="container">
+                    <h1>Краткое руководство</h1>
+                    <br/>
+                    <h2>Установка</h2>
+                    <ul>
+                        <li>установить драйвер -> <b>{%APPLICATION_PATH%}/driver/CDM20830_Setup.exe</b></li>
+                        <li>Подключить B5-80 и включить тумблер сзади</li>
+                        <li>Запустить <b>{%APPLICATION_PATH%}/driver/FTDIUNIN.EXE</b></li>
+                        <li>Запустить <b>{%APPLICATION_PATH%}/PSControl.exe</b> один раз</li>
+                        <li>Перезагрузить компьютер</li>
+                    </ul>
+
+                    <h2>Запуск эксперимента</h2>
+                    <ul>
+                        <li>Закрыть все окна (а лучше перезагрузится) во избежания воздействия соседних програм (0.001% вероятность но всеже) и освобождение памяти. *программа эксперимента хорошо пожирает память</li>
+                        <li>Открыть программу сервера <b>{%APPLICATION_PATH%}/program/<em>Application.exe</em></b></li>
+                        <li>Открыть программу эксперимента <b>{%APPLICATION_PATH%}/<em>bsuir-b580-nanotech.exe</em></b></li>
+                        <li>Запустить сервер нажав кнопку <b>Start</b></li>
+                        <li>Запустить эксперимент нажав кнопку <b>On</b> в окне эксперимента</li>
+                    </ul>
+                    <p>При закрытии окна сервера (Application.exe) - лучше перезагрузить компьютер. есть вероятность что процесс PSControl.exe не завершится самостоятельно (так же можно просто удалить его из процессов)</p>
+
+                    <h2>Данные</h2>
+                    <ul>
+                        <li>В папке <b>{%APPLICATION_PATH%}/log</b> хранятся все лог файлы в формате <b>.csv</b></li>
+                        <li>Для корректного экспорта в MS Excel нужно выставить кодировку UTF-8</li>
+                        <li>Графики и таблица данных показанные в окне эксперимента лишь для ознакомления (они в 10 раз менее точны чем в данные в CSV)</li>
+                    </ul>
+                    <p>Файл csv имеет формат <b>n,time,voltage,current,setting_voltage,setting_current,func_voltage,func_current</b></p>
+                    <p>
+                        Где <br/>
+                        <b>n</b> - порядковый номер <br/>
+                        <b>time</b> - время с начала эксперимента <br/>
+                        <b>voltage</b> - текущее значение напряжения на клеммах (с учетом нагрузки) <br/>
+                        <b>current</b> - текущее значение тока на клеммах (с учетом нагрузки) <br/>
+                        <b>setting_voltage</b> - значение напряжения до применения функции <br/>
+                        <b>setting_current</b> - значение тока до применения функции <br/>
+                        <b>func_voltage</b> - значение напряжения, которое было передано функцией для применения <br/>
+                        <b>func_current</b> - значение тока, которое было передано функцией для применения
+                    </p>
+
+                    <h2>Модификация эксперимента</h2>
+                    <ul>
+                        <li>Для модификации эксперимента измените файлик <b>function.js</b>. Функция должна обязательно вернуть обьект { voltage: Number, current: Number }, где 0 - необходимое значения напряжения или тока в текущий момент времени</li>
+                        <li>Сохранить предыдущую версиню функции эксперимента</li>
+                    </ul>
+                    <p>*Файл функции эксперимента описывается языком <b>JavaScript</b> (больше информации на сайте http://learn.javascript.com). Можно использовать практически все плюшки этого языка.</p>
+                    <p>Не может быть произведено никаких асинхронных вызовов. Данные не будут учтены</p>
+                    <p>В функцию приходят следующие аргументы <b>setting, values, date, number</b></p>
+                    <p>
+                        Где <br/>
+                        <b>setting</b> - <i>Object</i> - { voltage: Number, current Number } - настройки прибора в данную секунду, до применения функции (предыдущие).  <b>current</b> - это величина максимального тока которая будет ограничена прибором <br/>
+                        <b>values</b> - <i>Object</i> - { voltage: Number, current Number } - текущие значения на клеммах прибора с учетом нагрузки. <b>current</b> - это величина максимального тока которая будет ограничена прибором<br/>
+                        <b>date</b> - <i>Object</i> - {  - обьект важных дат <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<b>start</b>: <i>Number</i>, - таймстэмп начала эксперимента (<b>Date.now()</b>) <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<b>time</b>: <i>Number</i>, - время в микросекундах (1/1000 секунды) от начала эксперимента <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<b>interval</b>: <i>Number</i>, - интервал в микросекундах от предыдущего клика<br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<b>prev</b>: <i>Number</i> - таймстэмп предыдущего клика <br/>
+                        } <br/>
+                        <b>number</b> - порядковый номер клика
+                    </p>
+                    <p>*Если данные от функции придут не валидные - то программа автоматически отключится. но ошибку не покажет.</p>
+
+                    <h2>Кратко про работу программы</h2>
+                    <p>Каждые 100мкс программа сервера читает и записывает файлы в /runtime/settings.txt и /runtime/log.txt соответственно (Примерно в 10 раз медленней происходит обновление графиков и таблицы с данными в программе эксперимента).</p>
+                    <p>Программа эксперимента каждые 100мкс читает эти файлы и пропускает все значения через функцию, значения которой (если изменились) - записываются в файл для чтения сервером.</p>
+                    <p>Файл лога .csv записываются все текущие необходимые показатели с прибора и настроек</p>
+                    <p>Прибор имеет задержку при действии до 300мкс и при максимальной задержке в рассинхронизации потоков, суммарная задержка может достигнуть 500мкс. что достаточно для реагирования для всех нужд</p>
+                    <p>Прибор воспринимает значения тока до 4А и напряжения до 40В. Прибор воспринимает значения в 1/1000. Т.е. минимальное воспринятое значение тока может быть 0.001А и напряжения 0.001В (все что меньше - будет обрезаться до 0)</p>
+                    <br/>
+                </div>
             </div>
         </div>
     </div>
     <style type="text/css">
+        #mainButton .btn {
+            text-shadow: none;
+        }
+        #mainButtonOn.active {
+            background: #389300;
+            color: white;
+        }
         .table.table-bordered td {
             padding: 2px 4px;
         }
@@ -57,6 +142,7 @@
     <script type="text/javascript" src="./vendor/highcharts/js/highcharts.js"></script>
     <script type="text/javascript">
         $(function () {
+            console.log(1);
             var path = require('path');
 
             var gui = require('nw.gui');
@@ -71,6 +157,7 @@
             var $chartCurrent = $('#chartCurrent');
             var $current = $('#currentCurrent');
             var $voltage = $('#currentVoltage');
+            var $time = $('#currentTime');
             var $expName = $('#expName');
             var $config = $('#config');
 
@@ -79,10 +166,12 @@
             var chartCurrentLog = chart($chartCurrent, { name: 'Current', series: [ { name: 'Value', data: [] } ] });
 
             var manager = app({ window: true });
+            $config.html(JSON.stringify(manager.config, null, 4));
 
             var prevTime;
             manager.emitter
                 .on('start', function (config) {
+                    console.log(2);
                     tableLog.reset();
                     chartVoltageLog.reset();
                     chartCurrentLog.reset();
@@ -102,6 +191,7 @@
 
                     prevTime = newTime;
 
+                    $time.html(data.time.toFixed(0));
                     $current.html(data.current.toFixed(2));
                     $voltage.html(data.voltage.toFixed(2));
                 });
