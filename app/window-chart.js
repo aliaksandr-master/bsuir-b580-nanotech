@@ -13,6 +13,8 @@ module.exports = function ($chartWr, options) {
 	$chartWr.highcharts({
 		chart: {
 			zoomType: 'x',
+			width: null,
+			height: 280,
 			type: 'area',
 			spacing: [0, 0, 0, 0],
 			animation: false,
