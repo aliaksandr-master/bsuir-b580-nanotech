@@ -7,6 +7,7 @@ var config = require('./config');
 var delay = require('./delay');
 var logCsv = require('./log-csv');
 var device = require('./device');
+var fsExtra = require('fs-extra');
 
 var ExitError = function ExitError() {};
 util.inherits(ExitError, Error);
@@ -29,6 +30,7 @@ module.exports = function (options) {
 		isStarted = false;
 
 		return device(currentConfig).reset().then(function () {
+			emitter.emit('reset');
 			emitter.emit('stop');
 		});
 	};
@@ -47,6 +49,8 @@ module.exports = function (options) {
 		emitter.emit('start', currentConfig);
 
 		var _device = device(currentConfig);
+
+		fsExtra.copySync(currentConfig.functionFile, currentConfig.functionCopyFile);
 
 		return Promise.resolve()
 			.then(function () {
@@ -129,7 +133,9 @@ module.exports = function (options) {
 			.then(function () {
 				emitter.emit('end');
 
-				return _device.reset();
+				return _device.reset().then(function () {
+					emitter.emit('reset');
+				});
 			}, function (err) {
 				emitter.emit('end');
 				emitter.emit('error', err);

@@ -25,8 +25,8 @@
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#chartTab" aria-controls="chartTab" role="tab" data-toggle="tab">Chart</a></li>
             <li role="presentation"><a href="#dataTableTab" aria-controls="dataTableTab" role="tab" data-toggle="tab">Data Table</a></li>
-            <li role="presentation"><a href="#manTab" aria-controls="manTab" role="tab" data-toggle="tab">Manual</a></li>
-            <li role="presentation"><a href="#infoTab" aria-controls="infoTab" role="tab" data-toggle="tab">Info</a></li>
+            <li role="presentation"><a href="#manTab" aria-controls="manTab" role="tab" data-toggle="tab">Help</a></li>
+            <li role="presentation"><a href="#infoTab" aria-controls="infoTab" role="tab" data-toggle="tab">About</a></li>
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="chartTab">
@@ -252,6 +252,12 @@
                 })
                 .on('reset', function () {
                     messageLog.commit('Reset device');
+                })
+                .on('stop', function () {
+                    messageLog.commit('Stop event loop');
+                })
+                .on('end', function () {
+                    messageLog.commit('End experiment');
                 })
                 .on('loop', function () {
                     messageLog.commit('Start event loop');
