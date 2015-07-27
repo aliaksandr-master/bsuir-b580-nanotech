@@ -42,7 +42,7 @@ module.exports = function (fileName) {
 		columns = _.keys(data);
 		columnsLength = columns.length;
 
-		return commit(columns.join(',')).then(function () { return data; });
+		return commit(columns.join(';')).then(function () { return data; });
 	};
 
 	return {
