@@ -120,7 +120,6 @@ module.exports = function (options) {
 				});
 			})
 			.catch(function (err) {
-				console.log(require('util').inspect(ExitError, { depth: null, showHidden: true, colors: false }));
 				if (err instanceof ExitError) {
 					return Promise.resolve();
 				}

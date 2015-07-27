@@ -9,6 +9,34 @@ module.exports = function (config) {
 	var MAX_VOLTAGE = config.device.maxVoltage;
 	var exports = {};
 
+	exports.isInvalidData = function (voltage, current) {
+		if (!_.isNumber(voltage) || _.isNaN(voltage)) {
+			return new TypeError('voltage is not a Number' + ', ' + voltage + ' given ' + Object.prototype.toString.call(voltage));
+		}
+
+		if (!_.isNumber(current) || _.isNaN(current)) {
+			return new TypeError('current is not a Number' + ', ' + current + ' given ' + Object.prototype.toString.call(current));
+		}
+
+		if (voltage < 0) {
+			return new Error('voltage < 0' + ', ' + voltage + ' given ' + Object.prototype.toString.call(voltage));
+		}
+
+		if (current < 0) {
+			return new Error('current < 0' + ', ' + current + ' given ' + Object.prototype.toString.call(current));
+		}
+
+		if (voltage > MAX_VOLTAGE) {
+			return new Error('voltage > ' + MAX_VOLTAGE + ', ' + voltage + ' given ' + Object.prototype.toString.call(voltage));
+		}
+
+		if (current > MAX_CURRENT) {
+			return new Error('current > ' + MAX_CURRENT + ', ' + current + ' given ' + Object.prototype.toString.call(current));
+		}
+
+		return null;
+	};
+
 	exports.read = function (file, defaults) {
 		return new Promise(function (resolve, reject) {
 			var data;
@@ -23,12 +51,14 @@ module.exports = function (config) {
 			var voltage = Number(_data[0]) / 1000;
 			var current = Number(_data[1]) / 1000;
 
-			if (!_.isNumber(voltage) || !_.isNumber(current) || _.isNaN(voltage) || _.isNaN(current) || voltage < 0 || current < 0 || voltage > MAX_VOLTAGE || current > MAX_CURRENT) {
+			var err = exports.isInvalidData(voltage, current);
+
+			if (err) {
 				if (defaults) {
 					return defaults;
 				}
 
-				return reject(new Error('READ ERROR: file "' + path.basename(file) + '" v:' + voltage + ' i:' + current + ':::: "' + data + '"'));
+				return reject(err);
 			}
 
 			resolve({
@@ -40,8 +70,10 @@ module.exports = function (config) {
 
 	exports.write = function (file, values) {
 		return new Promise(function (resolve, reject) {
-			if (!values || !_.isNumber(values.voltage) || _.isNaN(values.voltage) || !_.isNumber(values.current) || _.isNaN(values.current) || values.voltage < 0 || values.voltage > MAX_VOLTAGE || values.current < 0 || values.current > MAX_CURRENT) {
-				return reject(new Error('WRITE ERROR: values must be object, values.voltage and values.current must be number' + '::::' + JSON.stringify(values)));
+			var err = exports.isInvalidData(values.voltage, values.current);
+
+			if (err) {
+				return reject(err);
 			}
 
 			var data = (values.voltage * 1000).toFixed(0) + ' ' + (values.current * 1000).toFixed(0);
