@@ -12,7 +12,7 @@ module.exports = function ($chartWr, options) {
 
 	$chartWr.highcharts({
 		chart: {
-			//zoomType: 'x',
+			zoomType: 'x',
 			type: 'area',
 			spacing: [0, 0, 0, 0],
 			animation: false,
