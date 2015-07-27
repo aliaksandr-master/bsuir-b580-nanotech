@@ -39,6 +39,7 @@
     "angular": "^1.4.3",
     "bootstrap": "^3.3.5",
     "fs-extra": "^0.22.1",
+    "highcharts": "0.0.8",
     "jquery": "^2.1.4",
     "lodash": "^3.10.0",
     "optimist": "^0.6.1"
