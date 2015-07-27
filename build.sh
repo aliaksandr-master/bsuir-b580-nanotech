@@ -19,12 +19,14 @@ node ./build-nw.js
 
 mkdir ./build/bsuir-b580-nanotech/win32/log/
 mkdir ./build/bsuir-b580-nanotech/win32/program/
+cp ./run/* ./build/bsuir-b580-nanotech/win32/
 cp -r ./run/driver ./build/bsuir-b580-nanotech/win32/
 cp -r ./run/runtime ./build/bsuir-b580-nanotech/win32/
 cp ./run/program/Project1.exe ./build/bsuir-b580-nanotech/win32/program/Application.exe
 
 mkdir ./build/bsuir-b580-nanotech/win64/log/
 mkdir ./build/bsuir-b580-nanotech/win64/program/
+cp ./run/* ./build/bsuir-b580-nanotech/win64/
 cp -r ./run/driver ./build/bsuir-b580-nanotech/win64/
 cp -r ./run/runtime ./build/bsuir-b580-nanotech/win64/
 cp ./run/program/Project1.exe ./build/bsuir-b580-nanotech/win64/program/Application.exe
