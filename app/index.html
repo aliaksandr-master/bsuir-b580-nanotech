@@ -50,9 +50,12 @@
                 <div class="log-list" id="log"></div>
                 <br/>
                 <br/>
+                <b>Memory</b>
+                <pre id="memory"></pre>
+                <br/>
+                <br/>
                 <b>Config:</b>
                 <pre id="config"></pre>
-                <br/>
                 <br/>
                 <b>Author:</b>
                 <div>alxe.master@gmail.com - Aliaksandr Pasynkau. можно слать вопросы и предложения но не часто =)</div>
@@ -222,6 +225,7 @@
             var $config = $('#config');
             var $log = $('#log');
             var $errorLog = $('#errorLog');
+            var $memory = $('#memory');
 
             var tableLog = table($table, { containerMethod: 'append' });
             var messageLog = log($log, { containerMethod: 'append' });
@@ -263,6 +267,7 @@
                         tableLog.commit(data);
                         chartVoltageLog.commit(0, { x: data.time, y: data.voltage });
                         chartCurrentLog.commit(0, { x: data.time, y: data.current });
+                        $memory.html(JSON.stringify(process.memoryUsage(), null, 4));
                     }
 
                     prevTime = newTime;
