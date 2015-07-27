@@ -8,7 +8,8 @@ var delay = require('./delay');
 var logCsv = require('./log-csv');
 var device = require('./device');
 
-var ExitError = util.inherits(function ExitError() {}, Error);
+var ExitError = function ExitError() {};
+util.inherits(ExitError, Error);
 
 module.exports = function (options) {
 	var emitter = new EventEmitter();
@@ -28,7 +29,6 @@ module.exports = function (options) {
 		isStarted = false;
 
 		return device(currentConfig).reset().then(function () {
-			console.log('stop');
 			emitter.emit('stop');
 		});
 	};
@@ -42,18 +42,21 @@ module.exports = function (options) {
 
 		currentConfig = config(options);
 
-		var logFile = logCsv(currentConfig.log.cvsFile);
+		var logFile = logCsv(currentConfig.log.csvFile);
 
-		console.log('start');
 		emitter.emit('start', currentConfig);
 
 		var _device = device(currentConfig);
 
 		return Promise.resolve()
-			.then(_device.reset)
+			.then(function () {
+				return _device.reset().then(function () {
+					emitter.emit('reset');
+				});
+			})
 			.then(_device.init)
 			.then(function () {
-				console.log('start loop');
+				emitter.emit('loop');
 
 				var startedAt = Date.now();
 				var prevDate = startedAt;
@@ -117,6 +120,7 @@ module.exports = function (options) {
 				});
 			})
 			.catch(function (err) {
+				console.log(require('util').inspect(ExitError, { depth: null, showHidden: true, colors: false }));
 				if (err instanceof ExitError) {
 					return Promise.resolve();
 				}
@@ -128,19 +132,18 @@ module.exports = function (options) {
 
 				return _device.reset();
 			}, function (err) {
+				emitter.emit('end');
 				emitter.emit('error', err);
 
 				return _device.reset().then(function () {
-					console.log('\nreset to zero\n');
-					console.log('END:> !!!!', err, err.stack);
-					process.exit();
+					emitter.emit('reset');
 				});
 			});
 	};
 
 	process.on('SIGINT', function () {
 		device(currentConfig).reset().then(function () {
-			console.log('\nreset to zero\n');
+			emitter.emit('reset');
 			process.exit();
 		});
 	});

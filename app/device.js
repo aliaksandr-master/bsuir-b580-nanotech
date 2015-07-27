@@ -69,24 +69,20 @@ module.exports = function (config) {
 	};
 
 	exports.resetSettings = function () {
-		console.log('resetSettings', config.detector.settingsFile);
 		return exports.write(config.detector.settingsFile, { voltage: 0, current: 0 });
 	};
 
 	exports.resetCurrentValues = function () {
-		console.log('resetCurrentValues', config.detector.logFile);
 		return exports.write(config.detector.logFile, { voltage: 0, current: 0 });
 	};
 
 	exports.reset = function () {
-		console.log('reset');
 		return exports.resetSettings().then(function () {
 			return exports.resetCurrentValues();
 		});
 	};
 
 	exports.init = function () {
-		console.log('init');
 		return new Promise(function (done) {
 			setTimeout(done, config.device.initDelay);
 		});

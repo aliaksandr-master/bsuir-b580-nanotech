@@ -1,5 +1,5 @@
 'use strict';
 
-var app = require('./lib/app');
+var app = require('./app');
 
 app(require('optimist').argv).start();

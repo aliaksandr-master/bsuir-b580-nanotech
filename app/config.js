@@ -2,21 +2,12 @@
 
 var path = require('path');
 var _ = require('lodash');
+var utils = require('./utils');
 
 module.exports = function (options) {
 	options = options ? options : {};
 
 	var d = new Date();
-
-	var s = function (d) {
-		d = String(d);
-
-		if (d.length < 2) {
-			return '0' + d;
-		}
-
-		return d;
-	};
 
 	options = _.extend({
 		window: false
@@ -33,6 +24,7 @@ module.exports = function (options) {
 	}
 
 	return _.extend({}, _.pick(options, [ 'window' ]), {
+		name: utils.dateString(d) + '--' + utils.timeString(d),
 		isWindowsPackage: isWindowsPackage,
 		cwd: CWD,
 		execPath: process.execPath,
@@ -44,7 +36,7 @@ module.exports = function (options) {
 			maxVoltage: Number(options['max-voltage'] || 40)
 		},
 		log: {
-			cvsFile: path.join(RUN_DIR, 'log/' + d.getFullYear() + '-' + s(d.getMonth()) + '-' + s(d.getDay()) + '--' + s(d.getHours()) + '-' + s(d.getMinutes()) + '-' + s(d.getSeconds()) + '.csv')
+			csvFile: path.join(RUN_DIR, 'log/' + utils.dateString(d) + '--' + utils.timeString(d) + '.csv')
 		},
 		detector: {
 			emitMinInterval: 500,

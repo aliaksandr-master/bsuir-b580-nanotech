@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css"/>
 </head>
 <body>
+    <div id="errorLog" class="log-list"></div>
     <div style="margin: 10px 20px;">
         <div>
             <div class="clearfix" style="margin: 10px 0 20px 0;">
@@ -45,9 +46,16 @@
             </div>
             <div role="tabpanel" class="tab-pane" id="infoTab">
                 <br/>
+                <b>Events:</b>
+                <div class="log-list" id="log"></div>
+                <br/>
+                <br/>
+                <b>Config:</b>
                 <pre id="config"></pre>
                 <br/>
-                <p><b>alxe.master@gmail.com</b> - Aliaksandr Pasynkau - разработчик программы. можно слать вопросы и предложения но не часто =)</p>
+                <br/>
+                <b>Author:</b>
+                <div>alxe.master@gmail.com - Aliaksandr Pasynkau. можно слать вопросы и предложения но не часто =)</div>
                 <br/>
             </div>
             <div role="tabpanel" class="tab-pane" id="manTab">
@@ -136,21 +144,73 @@
         .table.table-bordered td {
             padding: 2px 4px;
         }
+
+        .log-list {
+
+        }
+
+        .log-item {
+            display: block;
+            padding: 8px 16px;
+            border: 1px solid #c3d9ff;
+            line-height: 16px;
+            font-size: 13px;
+        }
+
+        .log-item.-default {
+            border: 1px solid #ccc;
+            background: #f6f6f6;
+        }
+
+        .log-item + .log-item {
+            margin: 5px 0 0;
+        }
+
+        .log-item.-error {
+            border-color: red;
+            background: #ff6332;
+            color: white;
+            font-weight: bold;
+        }
+
+        .log-item-date {
+            display: block;
+            float: left;
+            padding-right: 16px;
+            color: #999;
+            font-size: 10px;
+        }
+
+        .log-item.-error .log-item-date {
+            color: white;
+        }
+
+        .log-item-message {
+            overflow: hidden;
+            font-weight: bold;
+        }
+
+        .log-item-stack {
+            padding: 10px 0 0 !important;
+            border: none !important;
+            color: white !important;
+            background: transparent !important;
+        }
     </style>
     <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="./vendor/highcharts/js/highcharts.js"></script>
+    <script type="text/javascript" src="../node_modules/highcharts/scripts/highcharts.js"></script>
     <script type="text/javascript">
         $(function () {
-            console.log(1);
             var path = require('path');
 
             var gui = require('nw.gui');
             var win = gui.Window.get();
 
-            var app = require('../lib/app');
+            var app = require('./index');
             var table = require('./window-table');
             var chart = require('./window-chart');
+            var log = require('./window-log');
 
             var $table = $('#dataTable');
             var $chartVoltage = $('#chartVoltage');
@@ -160,8 +220,12 @@
             var $time = $('#currentTime');
             var $expName = $('#expName');
             var $config = $('#config');
+            var $log = $('#log');
+            var $errorLog = $('#errorLog');
 
             var tableLog = table($table, { containerMethod: 'append' });
+            var messageLog = log($log, { containerMethod: 'append' });
+            var errorLog = log($errorLog, { containerMethod: 'append' });
             var chartVoltageLog = chart($chartVoltage, { name: 'Voltage', series: [ { name: 'Value', data: [] } ] });
             var chartCurrentLog = chart($chartCurrent, { name: 'Current', series: [ { name: 'Value', data: [] } ] });
 
@@ -171,14 +235,26 @@
             var prevTime;
             manager.emitter
                 .on('start', function (config) {
-                    console.log(2);
+                    errorLog.reset();
+                    messageLog.reset();
+                    messageLog.commit('Start experiment');
                     tableLog.reset();
                     chartVoltageLog.reset();
                     chartCurrentLog.reset();
 
-                    $expName.html(path.basename(config.log.cvsFile));
+                    $expName.html(path.basename(config.name));
 
                     $config.html(JSON.stringify(config, null, 4));
+                })
+                .on('reset', function () {
+                    messageLog.commit('Reset device');
+                })
+                .on('loop', function () {
+                    messageLog.commit('Start event loop');
+                })
+                .on('error', function (err) {
+                    messageLog.commit(err.message || err, 'error', err.stack);
+                    errorLog.commit(err.message || err, 'error');
                 })
                 .on('data', function (data) {
                     var newTime = Math.floor(data.time);
