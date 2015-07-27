@@ -29,6 +29,7 @@ module.exports = function (options) {
 		cwd: CWD,
 		execPath: process.execPath,
 		functionFile: path.join(RUN_DIR, 'function.js'),
+		functionCopyFile: path.join(RUN_DIR, 'log/' + '' + utils.dateString(d) + '--' + utils.timeString(d) + '--function.js'),
 		device: {
 			checkInterval: Number(options.interval || 100),
 			initDelay: Number(options.delay || 500),
@@ -36,7 +37,7 @@ module.exports = function (options) {
 			maxVoltage: Number(options['max-voltage'] || 40)
 		},
 		log: {
-			csvFile: path.join(RUN_DIR, 'log/' + utils.dateString(d) + '--' + utils.timeString(d) + '.csv')
+			csvFile: path.join(RUN_DIR, 'log/' + utils.dateString(d) + '--' + utils.timeString(d) + '--data.csv')
 		},
 		detector: {
 			emitMinInterval: 500,
